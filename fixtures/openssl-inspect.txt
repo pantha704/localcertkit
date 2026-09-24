@@ -13,7 +13,7 @@ MAC: sha1, Iteration 2048
 MAC length: 20, salt length: 8
 PKCS7 Encrypted data: pbeWithSHA1And40BitRC2-CBC, Iteration 2048
 Error outputting keys and certificates
-40A7210BD4780000:error:0308010C:digital envelope routines:inner_evp_generic_fetch:unsupported:../crypto/evp/evp_fetch.c:376:Global default library context, Algorithm (RC2-40-CBC : 0), Properties ()
+4067AA853B770000:error:0308010C:digital envelope routines:inner_evp_generic_fetch:unsupported:../crypto/evp/evp_fetch.c:376:Global default library context, Algorithm (RC2-40-CBC : 0), Properties ()
 ### nopass.p12
 MAC: sha256, Iteration 2048
 MAC length: 32, salt length: 8

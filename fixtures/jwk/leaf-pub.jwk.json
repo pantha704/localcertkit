@@ -1,0 +1,8 @@
+{
+  "kty": "RSA",
+  "n": "jLdW9IyV2a6-bVFWPHoHpAc6etETMG80GZi1WIpOkksPLAQkhZemg2d7SN_oIJK2dHvu7HOowRfPboUv4OhQe9EaaM63dA0tQY3o-Qtuh6JxMhvSTf_NMxiYQjJyL6Vdr82qJzZkCEJJhqmxTJh5JG_s7ey4erPVFn6nUVli78zqPiUaBaVDn8MwAU_mkfF1FejTJRNqKPKej0ioshfeM33051LqX61K2Tn7nexr-5s6Olwg2sMuFSrKW_tr6xYbOgOcGHXxHf6YG5KLaw4FCoNfrwKo9Op51eivSoU_SBPIrE5Hc10cM62NbE07eYNcOqtRmlFF8sJH1NOmdtlERw",
+  "e": "AQAB",
+  "kid": "certkit-leaf-2026-09",
+  "alg": "RS256",
+  "use": "sig"
+}

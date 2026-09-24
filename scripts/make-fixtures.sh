@@ -52,16 +52,22 @@ for n in root inter leaf; do
     -subj "/CN=$n.certkit.test/O=CertKit Test" 2>/dev/null
 done
 # make a real root->intermediate relationship: self-signed root, intermediate CSR signed by root, leaf signed by intermediate
+# CSRs carry requested extensions (SANs on the leaf, CA:TRUE on the intermediate) so the
+# Gate-1 CSR decoder has something real to decode; x509 -copy_extensions copies them into the certs.
 $OPENSSL_BIN req -new -newkey rsa:2048 -sha256 -nodes \
-  -keyout fixtures/pem/inter-key.pem -out fixtures/pem/inter.csr -subj "/CN=inter.certkit.test/O=CertKit Test" 2>/dev/null
+  -keyout fixtures/pem/inter-key.pem -out fixtures/pem/inter.csr -subj "/CN=inter.certkit.test/O=CertKit Test" \
+  -addext "basicConstraints=critical,CA:TRUE,pathlen:0" 2>/dev/null
 $OPENSSL_BIN x509 -req -in fixtures/pem/inter.csr -CA fixtures/pem/root-cert.pem \
-  -CAkey fixtures/pem/root-key.pem -CAcreateserial -days 3000 -sha256 \
+  -CAkey fixtures/pem/root-key.pem -CAcreateserial -days 3000 -sha256 -copy_extensions copy \
   -out fixtures/pem/inter-cert.pem 2>/dev/null
 $OPENSSL_BIN req -new -newkey rsa:2048 -sha256 -nodes \
-  -keyout fixtures/pem/leaf-key.pem -out fixtures/pem/leaf.csr -subj "/CN=leaf.certkit.test/O=CertKit Test" 2>/dev/null
+  -keyout fixtures/pem/leaf-key.pem -out fixtures/pem/leaf.csr -subj "/CN=leaf.certkit.test/O=CertKit Test" \
+  -addext "subjectAltName=DNS:leaf.certkit.test,DNS:www.leaf.certkit.test,IP:203.0.113.10" 2>/dev/null
 $OPENSSL_BIN x509 -req -in fixtures/pem/leaf.csr -CA fixtures/pem/inter-cert.pem \
-  -CAkey fixtures/pem/inter-key.pem -CAcreateserial -days 825 -sha256 \
+  -CAkey fixtures/pem/inter-key.pem -CAcreateserial -days 825 -sha256 -copy_extensions copy \
   -out fixtures/pem/leaf-cert.pem 2>/dev/null
+# DER copy of the leaf certificate (Gate-1 DER inspector fixture)
+$OPENSSL_BIN x509 -in fixtures/pem/leaf-cert.pem -outform DER -out fixtures/leaf-cert.der
 cat fixtures/pem/leaf-cert.pem fixtures/pem/inter-cert.pem > fixtures/pem/chain.pem
 $OPENSSL_BIN pkcs12 -export -out fixtures/chain-aes256.p12 \
   -inkey fixtures/pem/leaf-key.pem -in fixtures/pem/chain.pem \
@@ -94,12 +100,19 @@ $OPENSSL_BIN pkcs12 -export -out fixtures/mixed-rsa-key-ec-cert.p12 \
               "modern-aes256-rsa4096.p12:bigpass" "ec-p256-aes256.p12:ecpass"; do
     f="${spec%%:*}"; pw="${spec#*:}"
     echo "### $f"
+    # `|| true`: OpenSSL 3 can legitimately fail on legacy-only algorithms (RC2-40);
+    # the diagnostic file should still be written.
     $OPENSSL_BIN pkcs12 -in "fixtures/$f" -passin "pass:$pw" -info -noout 2>&1 | \
-      grep -Ei "MAC|Encrypted|Keybag|Iteration|Error" | head -10
+      grep -Ei "MAC|Encrypted|Keybag|Iteration|Error" | head -10 || true
   done
 } > fixtures/openssl-inspect.txt 2>&1
 
-for f in fixtures/*.p12; do
+# ---------- JWK fixtures (Gate-1 inspector) ----------
+if command -v node >/dev/null 2>&1; then
+  node scripts/make-jwk-fixtures.mjs
+fi
+
+for f in fixtures/*.p12 fixtures/leaf-cert.der; do
   echo "== $f ($(stat -c%s "$f") bytes)"
 done
 echo "OK fixtures generated"
