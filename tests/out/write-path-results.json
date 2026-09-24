@@ -1,0 +1,16 @@
+{
+  "file": "/home/panther/Projects/certkit/tests/out/forge-write.p12",
+  "forgeReread": {
+    "keyBags": 1,
+    "certBags": 2
+  },
+  "opensslInfo": "MAC: sha1, Iteration 2048\nMAC length: 20, salt length: 8\nPKCS7 Data\nCertificate bag\nCertificate bag\nPKCS7 Data\nShrouded Keybag: PBES2, PBKDF2, AES-256-CBC, Iteration 2048, PRF hmacWithSHA1",
+  "opensslRoundTrip": {
+    "extractedCerts": 2,
+    "keyModulusMd5": "8306efe7b7f73535068b1f79a076ddbe",
+    "certModulusMd5": "8306efe7b7f73535068b1f79a076ddbe",
+    "originalKeyModulusMd5": "8306efe7b7f73535068b1f79a076ddbe",
+    "keyMatchesCert": true,
+    "keyMatchesOriginal": true
+  }
+}

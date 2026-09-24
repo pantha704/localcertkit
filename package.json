@@ -1,0 +1,18 @@
+{
+  "name": "certkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gate-0 spike: fully in-browser PKCS#12 (.pfx/.p12) parsing, certificate inspection and PEM export. No server, no upload.",
+  "scripts": {
+    "fixtures": "bash scripts/make-fixtures.sh",
+    "test:node": "node tests/node-smoke.mjs",
+    "test:browser": "node tests/browser-test.mjs",
+    "test": "node tests/node-smoke.mjs && node tests/browser-test.mjs"
+  },
+  "dependencies": {
+    "node-forge": "^1.4.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0"
+  }
+}

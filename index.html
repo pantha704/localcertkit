@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>certkit — in-browser PKCS#12 inspector (spike)</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 14px/1.45 system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.3rem; } h2 { font-size: 1.05rem; margin-top: 1.4rem; }
+  .row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; margin: .5rem 0; }
+  label { font-weight: 600; }
+  input[type=password], input[type=text] { padding: .35rem .5rem; }
+  button { padding: .4rem .8rem; cursor: pointer; }
+  #status { margin-left: .5rem; }
+  .ok { color: #0a7b32; font-weight: 700; } .bad { color: #b00020; font-weight: 700; }
+  .warn { color: #9a6700; font-weight: 700; }
+  .card { border: 1px solid #8884; border-radius: 8px; padding: .75rem 1rem; margin: .5rem 0; }
+  table { border-collapse: collapse; font-size: 13px; } td, th { text-align: left; padding: .15rem .6rem .15rem 0; vertical-align: top; }
+  textarea { width: 100%; height: 130px; font: 12px/1.4 monospace; }
+  pre { white-space: pre-wrap; word-break: break-all; }
+  .muted { opacity: .7; font-size: 12px; }
+  details summary { cursor: pointer; }
+  .badge { display: inline-block; padding: .05rem .45rem; border-radius: 999px; font-size: 12px; border: 1px solid currentColor; }
+</style>
+</head>
+<body>
+<h1>certkit <span class="muted">Gate-0 spike — all parsing happens locally, nothing uploaded</span></h1>
+
+<div class="row">
+  <label for="pfx">.pfx / .p12 file</label>
+  <input type="file" id="pfx" accept=".pfx,.p12,application/x-pkcs12">
+  <label for="pw">password</label>
+  <input type="password" id="pw" placeholder="(leave empty if none)">
+  <button id="parse">Parse</button>
+  <span id="status" class="muted">idle</span>
+</div>
+
+<div id="results"></div>
+
+<script src="./vendor/forge.min.js"></script>
+<script src="./lib/certkit.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
