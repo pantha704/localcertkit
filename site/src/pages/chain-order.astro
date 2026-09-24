@@ -1,0 +1,91 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  title="Certificate Chain Order Tool — leaf to root"
+  description="Sort a bundle of certificates into the correct chain order (leaf → intermediate → root) and find missing issuer links. Runs in your browser. PEM and DER supported."
+  h1="Certificate chain order"
+  lead="Paste several certificates (or drop files). CertKit figures out which is the leaf, orders the chain leaf → intermediate → root, verifies each issuer signature and lists missing links."
+  path="/chain-order/"
+  toolScript="/js/tools/chain-order.js"
+  jsonLdName="Certificate chain order tool"
+  jsonLdDescription="Order a mixed bundle of certificates into a leaf → intermediate → root chain and report missing issuer links, entirely in the browser."
+  faq={[
+    {
+      q: 'How does it find the order?',
+      a: 'Every certificate names its issuer. CertKit matches each issuer name to the subject of the other certificates in your input, then verifies the issuer’s signature where possible. The certificate that issues nothing else is the leaf and the walk starts there.',
+    },
+    {
+      q: 'What does a “missing issuer” mean?',
+      a: 'One of your certificates was issued by a certificate that is not in the bundle (or is not in your paste). Servers need the complete chain; the report names the exact issuer you need to add.',
+    },
+    {
+      q: 'Is the signature check a validation?',
+      a: 'No. CertKit checks that each parent certificate cryptographically signed the child — a consistency check for building the chain. It does not validate trust anchors, revocation, hostnames or policy; use a real TLS validator for that.',
+    },
+    {
+      q: 'What about duplicates?',
+      a: 'Duplicates are detected (same subject and serial) and counted, then ignored for ordering — handy when a concatenated bundle has the same intermediate twice.',
+    },
+  ]}
+>
+  <div id="tool-error" class="alert alert-error" role="alert" hidden></div>
+  <div id="tool-status" class="visually-hidden" role="status"></div>
+
+  <form id="tool-form" class="card" novalidate>
+    <h2>Your certificates</h2>
+    <div class="file-drop" data-dropzone>
+      <label class="field-label" for="chain-files">
+        Certificate files
+        <span class="hint">Select one or more .pem / .crt / .cer / .der files — drag &amp; drop works too</span>
+      </label>
+      <input type="file" id="chain-files" accept=".pem,.crt,.cer,.der,.txt" multiple />
+    </div>
+    <div class="field">
+      <label for="chain-input">
+        or paste multiple PEM certificates
+        <span class="hint">Any order. Files and pasted text are combined.</span>
+      </label>
+      <textarea id="chain-input" class="mono" spellcheck="false" rows="10" placeholder="-----BEGIN CERTIFICATE-----"></textarea>
+    </div>
+    <div class="btn-row">
+      <button type="submit" class="btn" id="chain-run">Order chain</button>
+    </div>
+  </form>
+
+  <section id="results" class="card" aria-labelledby="results-heading" hidden>
+    <div class="result-head">
+      <h2 id="results-heading">Ordered chain</h2>
+      <span id="chain-badge" class="badge badge-neutral">—</span>
+    </div>
+
+    <ol id="chain-list" class="chain-list"></ol>
+
+    <div id="links-block">
+      <h3>Issuer links</h3>
+      <ul id="links-list"></ul>
+    </div>
+
+    <div id="missing-block" class="alert alert-warn" hidden>
+      <strong>Missing issuer</strong>
+      <ul id="missing-list"></ul>
+      <p>Add the missing certificate(s) above and run the ordering again.</p>
+    </div>
+
+    <div id="unlinked-block" hidden>
+      <h3>Certificates that could not be linked</h3>
+      <ul id="unlinked-list"></ul>
+    </div>
+
+    <div id="notes-block" hidden>
+      <h3>Notes</h3>
+      <ul id="notes-list"></ul>
+    </div>
+
+    <p class="small muted">
+      The order is a consistency check, not a trust validation. For production trust decisions use a
+      full certificate validator.
+    </p>
+  </section>
+</ToolPage>

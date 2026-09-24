@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Privacy — nothing leaves your browser"
+  description="CertKit privacy note: files are processed locally in your browser, nothing is uploaded, no cookies, no analytics, no accounts. Read exactly what the site does and does not do."
+>
+  <div class="wrap tool-wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li aria-current="page">Privacy</li>
+      </ol>
+    </nav>
+
+    <header class="tool-head">
+      <h1>Privacy</h1>
+      <p class="lead">The short version: your files never leave your browser, and there is nothing to collect.</p>
+    </header>
+
+    <section class="card">
+      <h2>What happens to your files</h2>
+      <p>
+        Every tool on this site reads your file with the browser’s File API and processes it with
+        JavaScript that is served from this domain. There is no upload step, no API call and no
+        server-side processing. When you close the tab, the file is gone from memory.
+      </p>
+      <h2>What this site does not do</h2>
+      <ul>
+        <li>No file, key, password or certificate is transmitted anywhere.</li>
+        <li>No cookies, no localStorage, no fingerprinting, no session recording.</li>
+        <li>No analytics, no tracking pixels, no ad networks, no social embeds.</li>
+        <li>No accounts, no email collection, no newsletter.</li>
+      </ul>
+      <h2>Hosting</h2>
+      <p>
+        The site is static and hosted on Cloudflare Pages. Like virtually every web host, Cloudflare
+        receives standard request metadata (IP address, user agent, requested URL) when your browser
+        loads a page — that is how the HTML reaches you. No request that runs a tool carries your
+        data, so that metadata never includes a file, key or password. See
+        <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare’s privacy policy</a>
+        for how they handle request logs.
+      </p>
+      <h2>Verifying the claims</h2>
+      <p>
+        Open DevTools → Network, clear the log, then run any tool: you will see no request appear
+        while your file is processed. Disconnect your network after a page loads and the tools keep
+        working — the strongest possible proof that processing is local.
+      </p>
+      <h2>Contact</h2>
+      <p>
+        Questions about the privacy model? An open-source repository with an issue tracker is coming
+        soon; until then, use the <a href="/about/">about page</a> for context on the project.
+      </p>
+      <p class="small muted">Last updated: 24 September 2026.</p>
+    </section>
+  </div>
+</Base>

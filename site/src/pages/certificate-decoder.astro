@@ -1,0 +1,93 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  title="Certificate Decoder — PEM & DER, local"
+  description="Decode an X.509 certificate in your browser: subject, issuer, serial, validity dates, SANs, key size, signature algorithm, fingerprints and extensions. PEM or DER. No upload, free."
+  h1="Certificate decoder"
+  lead="Paste a certificate (PEM or base64 DER) or drop a file to read its subject, issuer, SANs, validity, serial, signature algorithm and extensions — with a raw JSON view."
+  path="/certificate-decoder/"
+  toolScript="/js/tools/certificate-decoder.js"
+  jsonLdName="Certificate decoder"
+  jsonLdDescription="Decode X.509 certificates (PEM or DER) in the browser: subject, issuer, SANs, validity, serial, signature algorithm and extensions."
+  faq={[
+    {
+      q: 'Which certificate file types can I inspect?',
+      a: 'PEM text (.pem, .crt, .cer), base64 pasted from anywhere, and raw DER binary files. Converted to the same in-memory structure and displayed identically.',
+    },
+    {
+      q: 'Does decoding use the certificate’s private key?',
+      a: 'There is no private key involved. A certificate is public data; this page only parses it locally. Nothing is uploaded.',
+    },
+    {
+      q: 'Why is my EC certificate rejected?',
+      a: 'CertKit v1 parses RSA certificates only; EC and Ed25519 objects produce a clear unsupported message. EC support is the first item on the roadmap.',
+    },
+    {
+      q: 'What is the raw JSON view?',
+      a: 'The certificate’s complete ASN.1 structure, rendered as JSON, so you can inspect exact fields, OIDs and bit strings without installing anything.',
+    },
+  ]}
+>
+  <div id="tool-error" class="alert alert-error" role="alert" hidden></div>
+  <div id="tool-status" class="visually-hidden" role="status"></div>
+
+  <form id="tool-form" class="card" novalidate>
+    <h2>Certificate</h2>
+    <div class="file-drop" data-dropzone>
+      <label class="field-label" for="cert-file">
+        Certificate file
+        <span class="hint">.pem, .crt, .cer or .der — drag &amp; drop, or choose</span>
+      </label>
+      <input type="file" id="cert-file" accept=".pem,.crt,.cer,.der,.txt" />
+    </div>
+    <div class="field">
+      <label for="cert-input">
+        or paste PEM / base64 DER
+        <span class="hint">A file wins if both are provided.</span>
+      </label>
+      <textarea id="cert-input" class="mono" spellcheck="false" rows="8" placeholder="-----BEGIN CERTIFICATE-----"></textarea>
+    </div>
+    <div class="btn-row">
+      <button type="submit" class="btn" id="cert-run">Decode certificate</button>
+    </div>
+    <p class="small muted">RSA-first v1: EC / Ed25519 certificates are not supported yet — <a href="/roadmap/">see the roadmap</a>.</p>
+  </form>
+
+  <section id="results" class="card" aria-labelledby="results-heading" hidden>
+    <div class="result-head">
+      <h2 id="results-heading">Decoded certificate</h2>
+      <span id="validity-badge" class="badge badge-neutral">—</span>
+    </div>
+
+    <div class="btn-row">
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" id="view-human" data-pane="human" aria-pressed="true">Human-readable</button>
+        <button type="button" id="view-json" data-pane="json" aria-pressed="false">Raw JSON</button>
+      </div>
+    </div>
+
+    <div id="pane-human">
+      <dl class="summary-dl" id="cert-summary"></dl>
+      <h3>Subject alternative names</h3>
+      <ul id="san-list"></ul>
+      <h3>Extensions</h3>
+      <dl class="summary-dl" id="ext-summary"></dl>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" id="copy-pem" data-copy="out-pem" data-copy-status="copy-status-pem">Copy PEM</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-pem" data-filename="certificate.pem" data-mime="application/x-pem-file">Download PEM</button>
+        <button type="button" class="btn btn-small btn-secondary" id="download-der">Download DER</button>
+        <span class="small muted" id="copy-status-pem"></span>
+      </div>
+      <label class="visually-hidden" for="out-pem">Certificate PEM</label>
+      <textarea id="out-pem" class="mono" readonly spellcheck="false" hidden></textarea>
+    </div>
+
+    <div id="pane-json" hidden>
+      <h3>ASN.1 as JSON</h3>
+      <p class="small muted">Long values are truncated with a byte count. This is a structural view, not a re-encoded certificate.</p>
+      <pre id="cert-json" class="raw-json" tabindex="0"></pre>
+    </div>
+  </section>
+</ToolPage>

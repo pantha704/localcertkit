@@ -1,0 +1,40 @@
+---
+import { NAV, SITE } from '../lib/site';
+
+const path = Astro.url.pathname;
+const normalize = (p: string) => (p.endsWith('/') ? p : `${p}/`);
+const current = normalize(path);
+
+const isCurrent = (href: string) => {
+  if (href === '/') return current === '/';
+  if (href.startsWith('/#')) return false; // in-page anchors never mark the page
+  return current === href || current.startsWith(href);
+};
+---
+
+<header class="site-header">
+  <div class="wrap header-bar">
+    <a class="brand" href="/">
+      <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#16203a"></rect>
+        <path d="M32 9 49 15.5v12.2C49 40.4 41.2 49.4 32 53 22.8 49.4 15 40.4 15 27.7V15.5Z" fill="none" stroke="#a5b4fc" stroke-width="4" stroke-linejoin="round"></path>
+        <circle cx="32" cy="27" r="5" fill="#a5b4fc"></circle>
+        <path d="M32 32v10" stroke="#a5b4fc" stroke-width="4" stroke-linecap="round"></path>
+      </svg>
+      <span>{SITE.name}</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

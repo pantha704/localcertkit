@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CertKit">
+  <rect width="64" height="64" rx="14" fill="#0b1220"/>
+  <path d="M32 9 49 15.5v12.2C49 40.4 41.2 49.4 32 53 22.8 49.4 15 40.4 15 27.7V15.5Z" fill="none" stroke="#a5b4fc" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="32" cy="27" r="5" fill="#a5b4fc"/>
+  <path d="M32 32v10" stroke="#a5b4fc" stroke-width="4" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,105 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  title="DER Certificate & JWK Inspector — local"
+  description="Inspect a DER certificate or parse a JWK / JWK-set: key type, kid, alg, use, curve and size, plus private-material warnings. Runs in your browser, no upload, no verification claims."
+  h1="DER &amp; JWK inspector"
+  lead="Two inspectors in one page: a DER certificate reader, and a JWK / JWK-set parser that shows kid, alg, use and key parameters — with no verification claims."
+  path="/der-jwk-inspector/"
+  toolScript="/js/tools/der-jwk-inspector.js"
+  jsonLdName="DER certificate and JWK inspector"
+  jsonLdDescription="Inspect DER certificates and parse JWK / JWK-set JSON in the browser, including key type, kid, alg, use and private-material warnings."
+  faq={[
+    {
+      q: 'Does parsing a JWK verify it?',
+      a: 'No. This inspector parses and describes the JSON only: key type, key id, algorithm label, intended use, curve or size, and whether private material is present. It makes no claim that the key is valid, trusted or matches anything.',
+    },
+    {
+      q: 'What does the JWK warning about “d” mean?',
+      a: 'A JWK field "d" is private key material. CertKit cannot undo that exposure — if you pasted a real private JWK anywhere, treat that key as compromised and rotate it.',
+    },
+    {
+      q: 'Can I inspect EC JWKs even though the X.509 tools are RSA-only?',
+      a: 'Yes. JWK parsing is pure JSON, so EC, RSA and symmetric JWKs are all described. X.509/PKCS#12 handling is RSA-first in v1 — EC support is on the roadmap.',
+    },
+    {
+      q: 'Is my file uploaded?',
+      a: 'No. Both inspectors run in this tab. Open DevTools → Network and run them to confirm: no request carries your data.',
+    },
+  ]}
+>
+  <div id="tool-error" class="alert alert-error" role="alert" hidden></div>
+  <div id="tool-status" class="visually-hidden" role="status"></div>
+
+  <section class="card" aria-labelledby="der-heading">
+    <h2 id="der-heading">DER certificate inspector</h2>
+    <p class="card-sub">Read a raw DER certificate (.der / .cer) — the same decoder as the certificate tool, in compact form.</p>
+
+    <form id="der-form" novalidate>
+      <div class="file-drop" data-dropzone>
+        <label class="field-label" for="der-file">DER certificate <span class="hint">drag &amp; drop, or choose</span></label>
+        <input type="file" id="der-file" accept=".der,.cer,.crt,.pem" />
+      </div>
+      <div class="field">
+        <label for="der-input">or paste base64 DER / PEM</label>
+        <textarea id="der-input" class="mono" spellcheck="false" rows="5" placeholder="MIID... (base64)" ></textarea>
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn" id="der-run">Inspect certificate</button>
+      </div>
+    </form>
+
+    <div id="der-results" hidden>
+      <dl class="summary-dl" id="der-summary"></dl>
+      <p class="small muted">
+        Need the full view? <a href="/certificate-decoder/">Open it in the certificate decoder</a>
+        (with the raw ASN.1 JSON and extension list).
+      </p>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="jwk-heading">
+    <h2 id="jwk-heading">JWK / JWK-set inspector</h2>
+    <p class="card-sub">Paste a single JWK or a <span class="mono">&#123; "keys": [ … ] &#125;</span> set. Parsed and described — not verified.</p>
+
+    <form id="jwk-form" novalidate>
+      <div class="file-drop" data-dropzone>
+        <label class="field-label" for="jwk-file">JWK file <span class="hint">.json — drag &amp; drop, or choose</span></label>
+        <input type="file" id="jwk-file" accept=".json,.txt" />
+      </div>
+      <div class="field">
+        <label for="jwk-input">or paste JWK / JWK-set JSON</label>
+        <textarea id="jwk-input" class="mono" spellcheck="false" rows="7" placeholder="paste JSON: &#123; &quot;kty&quot;: &quot;RSA&quot;, &quot;kid&quot;: &quot;…&quot; &#125;"></textarea>
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn" id="jwk-run">Inspect JWK</button>
+      </div>
+    </form>
+
+    <div id="jwk-results" hidden>
+      <dl class="summary-dl" id="jwk-summary"></dl>
+      <div id="jwk-warnings" class="alert alert-warn" hidden></div>
+      <table class="data" id="jwk-table">
+        <caption id="jwk-caption">Keys</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">kty</th>
+            <th scope="col">kid</th>
+            <th scope="col">alg</th>
+            <th scope="col">use</th>
+            <th scope="col">Size / curve</th>
+            <th scope="col">Private?</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="small muted">
+        Parsed for inspection only — <strong>no signature verification or key validation is performed</strong>.
+        To check a key against a certificate, use the <a href="/key-cert-match/">match checker</a> (RSA).
+      </p>
+    </div>
+  </section>
+</ToolPage>

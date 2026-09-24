@@ -1,0 +1,87 @@
+---
+import Base from './Base.astro';
+import { toolJsonLd } from '../lib/site';
+
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  h1: string;
+  lead: string;
+  /** Path shown in breadcrumb + JSON-LD URL, e.g. /pfx-to-pem/ */
+  path: string;
+  /** Page script under /js/tools/, e.g. /js/tools/pfx-to-pem.js */
+  toolScript: string;
+  faq?: FaqItem[];
+  jsonLdName?: string;
+  jsonLdDescription?: string;
+}
+
+const {
+  title,
+  description,
+  h1,
+  lead,
+  path,
+  toolScript,
+  faq = [],
+  jsonLdName = h1,
+  jsonLdDescription = description,
+} = Astro.props;
+---
+
+<Base title={title} description={description} jsonLd={[toolJsonLd({ name: jsonLdName, description: jsonLdDescription, path })]}>
+  <div class="wrap tool-wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li aria-current="page">{h1}</li>
+      </ol>
+    </nav>
+
+    <header class="tool-head">
+      <h1>{h1}</h1>
+      <p class="lead">{lead}</p>
+      <p class="local-badge">Runs locally in your browser — nothing is uploaded</p>
+    </header>
+
+    <slot />
+
+    {
+      faq.length > 0 && (
+        <section class="section faq-section" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">Questions</h2>
+          {faq.map((item) => (
+            <details>
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
+      )
+    }
+
+    <section class="section" aria-labelledby="how-local">
+      <h2 id="how-local">How this runs locally</h2>
+      <p>
+        CertKit is a static site. Parsing and cryptography run inside this browser tab using a
+        vendored copy of <span class="mono">node-forge 1.4.0</span> served from this domain. Open
+        DevTools → Network, run the tool, and you will see no request that contains your file —
+        nothing is uploaded, and nothing is stored.
+      </p>
+      <p class="small muted">
+        <a href="/privacy/">Read the full privacy note</a> · <a href="/roadmap/">Roadmap</a> ·
+        <a href="/">All tools</a>
+      </p>
+    </section>
+  </div>
+</Base>
+
+<script is:inline src="/vendor/forge.min.js" defer></script>
+<script is:inline src="/lib/certkit.js" defer></script>
+<script is:inline src="/js/ui.js" defer></script>
+<script is:inline src={toolScript} defer></script>

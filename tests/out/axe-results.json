@@ -1,0 +1,227 @@
+{
+  "engine": "../../accessproof/engine (axe-core, WCAG 2.2 A/AA tags)",
+  "scannedAt": "2026-09-24T10:15:31.547Z",
+  "baseUrl": "http://127.0.0.1:4400",
+  "totalPages": 12,
+  "cleanPages": 12,
+  "pagesWithViolations": 0,
+  "rows": [
+    {
+      "page": "/",
+      "slug": "home",
+      "status": 200,
+      "title": "CertKit — certificate tools that never see your keys",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/pfx-to-pem/",
+      "slug": "pfx-to-pem",
+      "status": 200,
+      "title": "PFX to PEM Converter — local, nothing uploaded | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/pem-to-pfx/",
+      "slug": "pem-to-pfx",
+      "status": 200,
+      "title": "PEM to PFX Converter — local, honest limits | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/certificate-decoder/",
+      "slug": "certificate-decoder",
+      "status": 200,
+      "title": "Certificate Decoder — PEM & DER, local | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/csr-decoder/",
+      "slug": "csr-decoder",
+      "status": 200,
+      "title": "CSR Decoder — check SANs, key and signature | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/key-cert-match/",
+      "slug": "key-cert-match",
+      "status": 200,
+      "title": "Key & Certificate Match Check — local | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/chain-order/",
+      "slug": "chain-order",
+      "status": 200,
+      "title": "Certificate Chain Order Tool — leaf to root | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/der-jwk-inspector/",
+      "slug": "der-jwk-inspector",
+      "status": 200,
+      "title": "DER Certificate & JWK Inspector — local | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/privacy/",
+      "slug": "privacy",
+      "status": 200,
+      "title": "Privacy — nothing leaves your browser | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/about/",
+      "slug": "about",
+      "status": 200,
+      "title": "About — why CertKit exists",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/roadmap/",
+      "slug": "roadmap",
+      "status": 200,
+      "title": "Roadmap — EC support first | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    },
+    {
+      "page": "/this-page-does-not-exist/",
+      "slug": "404",
+      "status": 404,
+      "title": "Page not found (404) | CertKit",
+      "violations": 0,
+      "violationIds": [],
+      "impactCounts": {
+        "violations": 0,
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0,
+        "unknown": 0
+      },
+      "axeError": null,
+      "enginePageError": null
+    }
+  ],
+  "rawReportsDir": "/tmp/certkit-axe-tycl5o"
+}

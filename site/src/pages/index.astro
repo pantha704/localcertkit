@@ -1,0 +1,153 @@
+---
+import Base from '../layouts/Base.astro';
+import { AFFILIATE_CERT_SLOT, REPO_URL, SITE, TOOLS } from '../lib/site';
+
+const faq = [
+  {
+    q: 'Are my keys or files uploaded anywhere?',
+    a: 'No. Every tool on this site runs entirely inside your browser tab: files are read with the browser File API, and the cryptography runs in JavaScript served from this domain. Your private keys never leave your device, and nothing is stored.',
+  },
+  {
+    q: 'How can I verify that myself?',
+    a: 'Open DevTools → Network, load any tool and run your file. You will see only the page assets (HTML, CSS, JS, favicon) — no request ever carries your file or password. You can also disconnect from the internet after the page loads: the tools keep working.',
+  },
+  {
+    q: 'Why is EC support missing?',
+    a: 'v1 is deliberately RSA-first: the whole toolkit was proven end-to-end on RSA before adding more. EC and Ed25519 support is the first item on the roadmap. When a tool meets an EC object it says so clearly instead of guessing.',
+  },
+  {
+    q: 'Is a PFX created here compatible everywhere?',
+    a: 'Files created by the PEM → PFX tool open in OpenSSL and Windows, and were tested against OpenSSL. Two honest details differ from an OpenSSL-built file: the MAC is HMAC-SHA-1 and the certificate bags are stored unencrypted inside the container. The tool page documents this before you use it.',
+  },
+  {
+    q: 'Does it cost anything?',
+    a: 'No. CertKit is free, has no accounts, no ads and no tracking. There is a reserved slot for a future certificate-provider partner link, and it is currently unused — no affiliate links are shown.',
+  },
+  {
+    q: 'Should I use this with production keys?',
+    a: 'Only on a machine you trust — that rule applies to every key tool, including this one. Because CertKit makes no network calls, it is safe to use fully offline, which is exactly how sensitive work should be done.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    description:
+      'Browser-local certificate and key tools: PFX to PEM, PEM to PFX, certificate and CSR decoders, key matching and chain ordering. Nothing is uploaded.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'CertKit tools',
+    itemListElement: TOOLS.map((tool, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: tool.label,
+      url: `${SITE.url}${tool.href}`,
+    })),
+  },
+];
+---
+
+<Base
+  title="CertKit — certificate tools that never see your keys"
+  description="Free browser-local certificate tools: convert PFX to PEM, decode certificates and CSRs, check key/cert matches and order chains. Nothing is uploaded — everything runs in your browser."
+  jsonLd={jsonLd}
+>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Certificate tools that never see your keys</h1>
+      <p class="lead">
+        PFX conversion, certificate and CSR decoding, key matching, chain ordering — everything runs
+        in your browser. No uploads, no accounts, no server.
+      </p>
+      <ul class="hero-badges">
+        <li>No uploads</li>
+        <li>No accounts</li>
+        <li>No ads, no tracking</li>
+        <li>Free</li>
+        <li>Works offline once loaded</li>
+      </ul>
+    </section>
+
+    <section class="section" id="tools" aria-labelledby="tools-heading">
+      <h2 id="tools-heading">Tools</h2>
+      <p class="muted">All seven tools share the same property: your file stays on your machine.</p>
+      <ul class="tool-grid">
+        {
+          TOOLS.map((tool) => (
+            <li>
+              <a class="tool-card" href={tool.href}>
+                <h3>{tool.label}</h3>
+                <p>{tool.blurb}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" id="how-local" aria-labelledby="how-local-heading">
+      <h2 id="how-local-heading">How “local” works</h2>
+      <div class="card">
+        <ul>
+          <li>
+            <strong>One vendored library.</strong> Parsing and crypto use a pinned copy of
+            <span class="mono">node-forge 1.4.0</span> served from this domain — not a CDN, and not a
+            service.
+          </li>
+          <li>
+            <strong>Zero network calls in the tool flows.</strong> Open DevTools → Network, run any
+            tool, and you will see no request containing your data. You can also load a page and then
+            disconnect: the tools keep working.
+          </li>
+          <li>
+            <strong>No storage.</strong> Nothing is written to localStorage, cookies or a server;
+            results exist only in this tab until you close it.
+          </li>
+          <li>
+            <strong>Verify, don’t trust.</strong> Every tool page links back to this section so you
+            can check the claims with your own DevTools.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="trust-heading">
+      <h2 id="trust-heading">Trust &amp; transparency</h2>
+      <div class="card">
+        <ul>
+          <li>No ads. No analytics. No tracking pixels. No affiliate links (a partner slot exists in the config and is unused).</li>
+          <li>No accounts, no email required, no rate limits, no paid tier.</li>
+          <li>
+            {
+              REPO_URL ? (
+                <span><a href={REPO_URL}>Open-source repository</a> — read the exact code that runs.</span>
+              ) : (
+                <span>
+                  <span class="placeholder">Open-source repository — link coming soon</span>: the
+                  parsing library and tests are already published with the project.
+                </span>
+              )
+            }
+          </li>
+          <li>RSA-first v1, with EC/Ed25519 on the <a href="/roadmap/">roadmap</a> — limitations are stated up front, not discovered later.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section faq-section" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Frequently asked questions</h2>
+      {faq.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </section>
+    {/* AFFILIATE_CERT_SLOT: reserved (see src/lib/site.ts) — intentionally unused in v1 */}
+  </div>
+</Base>

@@ -1,0 +1,123 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  title="PEM to PFX Converter — local, honest limits"
+  description="Build a password-protected PFX / P12 file from a PEM private key and certificate chain in your browser. No upload. Documents the SHA-1 MAC and compatibility limits honestly."
+  h1="PEM to PFX"
+  lead="Build a password-protected .pfx / .p12 file from a PEM private key and one or more certificates. Everything runs in this tab — your key is never uploaded."
+  path="/pem-to-pfx/"
+  toolScript="/js/tools/pem-to-pfx.js"
+  jsonLdName="PEM to PFX converter"
+  jsonLdDescription="Create a PKCS#12 (.pfx/.p12) file from a PEM private key and certificate chain entirely in the browser. Files are never uploaded."
+  faq={[
+    {
+      q: 'Is the PFX this tool creates fully standard?',
+      a: 'It is a valid PKCS#12 that OpenSSL and Windows can open and it was tested against OpenSSL, but it is built by the in-browser library, so two details differ from an OpenSSL-built file: the MAC is HMAC-SHA-1, and the certificate bags are stored unencrypted inside the container (the private key itself is AES-256-CBC encrypted). Keep your PEM files as the source of truth.',
+    },
+    {
+      q: 'Why does it refuse a key that does not match the certificate?',
+      a: 'A PFX whose key and certificate do not match is broken everywhere it is imported, and the failure surfaces later in confusing ways. CertKit checks the modulus and a real sign/verify round-trip first, and refuses to build a broken file.',
+    },
+    {
+      q: 'Which password should I use?',
+      a: 'Any non-empty password. Use a strong, unique one — the PFX will be protected by it, and the tool never sees or stores it beyond this page.',
+    },
+    {
+      q: 'Anything I should not do with this tool?',
+      a: 'Do not paste production private keys into a computer you do not trust — that applies to every key tool, including this one. CertKit makes no network calls, but the machine itself is your trust boundary.',
+    },
+  ]}
+>
+  <div id="tool-error" class="alert alert-error" role="alert" hidden></div>
+  <div id="tool-status" class="visually-hidden" role="status"></div>
+
+  <div class="alert alert-warn">
+    <strong>Read before using the output.</strong>
+    <p>
+      The PFX is written by the bundled in-browser library. It uses an
+      <strong>HMAC-SHA-1 MAC</strong> and stores certificate bags unencrypted (the private key bag is
+      AES-256-CBC). OpenSSL and Windows read it, but if a strict platform rejects it, rebuild the
+      file with OpenSSL. Your PEM inputs remain the authoritative copy.
+    </p>
+  </div>
+
+  <form id="tool-form" class="card" novalidate>
+    <h2>Input PEM files</h2>
+
+    <div class="field">
+      <label for="key-pem">
+        Private key (PEM)
+        <span class="hint">RSA key in PKCS#1 or PKCS#8 PEM format. Drag &amp; drop a file onto the box or paste it.</span>
+      </label>
+      <div data-dropzone>
+        <label class="field-label" for="key-file">Key file <span class="hint">optional — fills the box below</span></label>
+        <input type="file" id="key-file" accept=".pem,.key,.txt" />
+      </div>
+      <textarea id="key-pem" class="mono" spellcheck="false" rows="7" placeholder="-----BEGIN PRIVATE KEY-----"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="cert-pems">
+        Certificate(s) (PEM)
+        <span class="hint">One or more certificates — leaf first, then intermediates. Drag &amp; drop a file onto the box or paste them.</span>
+      </label>
+      <div data-dropzone>
+        <label class="field-label" for="cert-file">Certificate file <span class="hint">optional — fills the box below</span></label>
+        <input type="file" id="cert-file" accept=".pem,.crt,.cer,.txt" />
+      </div>
+      <textarea id="cert-pems" class="mono" spellcheck="false" rows="7" placeholder="-----BEGIN CERTIFICATE-----"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="pfx-password">
+        Export password
+        <span class="hint">Required. Used to encrypt the private key inside the PFX.</span>
+      </label>
+      <input type="password" id="pfx-password" autocomplete="new-password" spellcheck="false" />
+    </div>
+
+    <div class="field">
+      <label for="friendly-name">
+        Friendly name <span class="hint">Optional label stored in the file (e.g. your domain).</span>
+      </label>
+      <input type="text" id="friendly-name" autocomplete="off" spellcheck="false" />
+    </div>
+
+    <div class="btn-row">
+      <button type="submit" class="btn" id="pfx-run">Create PFX</button>
+    </div>
+    <p class="small muted">
+      EC / Ed25519 keys are not supported in v1 — <a href="/roadmap/">see the roadmap</a>.
+    </p>
+  </form>
+
+  <section id="results" class="card" aria-labelledby="results-heading" hidden>
+    <div class="result-head">
+      <h2 id="results-heading">Your PKCS#12 file is ready</h2>
+      <span id="match-badge" class="badge badge-ok">key matches certificate</span>
+    </div>
+    <dl class="summary-dl" id="file-summary"></dl>
+
+    <div class="out">
+      <h3>Download</h3>
+      <p class="small muted">The file leaves this page only through your own browser download.</p>
+      <div class="out-actions">
+        <button type="button" class="btn" id="download-pfx">Download .pfx</button>
+      </div>
+    </div>
+
+    <div class="out">
+      <h3>Base64 of the PFX (optional)</h3>
+      <p class="small muted">Some platforms want the container as text. Copy it only into trusted systems.</p>
+      <label class="visually-hidden" for="out-base64">Base64-encoded PKCS#12</label>
+      <textarea id="out-base64" class="mono" readonly spellcheck="false"></textarea>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-base64" data-copy-status="copy-status-b64">Copy</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-base64" data-filename="certkit.p12.base64.txt" data-mime="text/plain;charset=utf-8">Download .txt</button>
+        <span class="small muted" id="copy-status-b64"></span>
+      </div>
+    </div>
+  </section>
+</ToolPage>

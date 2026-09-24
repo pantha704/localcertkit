@@ -1,0 +1,195 @@
+{
+  "engine": "chromium via playwright-core",
+  "baseUrl": "http://127.0.0.1:4399",
+  "builtAt": "2026-09-24T10:15:57.590Z",
+  "total": 18,
+  "passed": 18,
+  "failed": 0,
+  "cases": [
+    {
+      "name": "pfx-to-pem: modern AES-256 file → key + cert + match",
+      "ok": true,
+      "ms": 1533,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "keyLength": 1679,
+        "certs": 1
+      }
+    },
+    {
+      "name": "pfx-to-pem: wrong password → clear error",
+      "ok": true,
+      "ms": 159,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "Wrong password, or the file is damaged — the PKCS#12 integrity check (MAC) failed. Passwor"
+      }
+    },
+    {
+      "name": "pfx-to-pem: EC file → friendly unsupported + roadmap link",
+      "ok": true,
+      "ms": 173,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "This file contains EC or Ed25519 keys/certificates and CertKit v1 handles RSA on"
+      }
+    },
+    {
+      "name": "pem-to-pfx: leaf key + chain → downloadable PFX, forge-verified",
+      "ok": true,
+      "ms": 2052,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "pfxBytes": 3442,
+        "certBags": 2
+      }
+    },
+    {
+      "name": "pem-to-pfx: mismatched key/cert → refused with hint",
+      "ok": true,
+      "ms": 1582,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "The private key does not match the first certificate — refusing to build a broke"
+      }
+    },
+    {
+      "name": "pem-to-pfx: EC key → friendly unsupported",
+      "ok": true,
+      "ms": 1513,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "This looks like an EC or Ed25519 object. CertKit v1 handles RSA only — EC/Ed2551"
+      }
+    },
+    {
+      "name": "certificate-decoder: PEM cert → subject/SANs/signature + raw JSON",
+      "ok": true,
+      "ms": 2407,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "sanLines": 3,
+        "rawJsonBytes": 5985
+      }
+    },
+    {
+      "name": "certificate-decoder: garbage input → error, no crash",
+      "ok": true,
+      "ms": 106,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "Could not parse certificate: Too few bytes to parse DER."
+      }
+    },
+    {
+      "name": "csr-decoder: leaf CSR → CN, SANs, signature verified",
+      "ok": true,
+      "ms": 981,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "badge": "signature verified",
+        "sans": 3
+      }
+    },
+    {
+      "name": "csr-decoder: garbage input → error",
+      "ok": true,
+      "ms": 102,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "Could not parse certificate signing request: Too few bytes to read ASN.1 value."
+      }
+    },
+    {
+      "name": "key-cert-match: real pair → MATCH",
+      "ok": true,
+      "ms": 574,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "badge": "MATCH — this key belongs to this certifi"
+      }
+    },
+    {
+      "name": "key-cert-match: different pair → NO MATCH",
+      "ok": true,
+      "ms": 532,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "badge": "NO MATCH — key and certificate are not a"
+      }
+    },
+    {
+      "name": "key-cert-match: garbage key → error",
+      "ok": true,
+      "ms": 483,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "Could not read the private key: expected an unencrypted RSA private key in PEM f"
+      }
+    },
+    {
+      "name": "chain-order: shuffled root/leaf/inter → ordered leaf→root",
+      "ok": true,
+      "ms": 1021,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "order": "leaf → inter → root",
+        "links": 2
+      }
+    },
+    {
+      "name": "chain-order: missing intermediate → reported + unlinked root",
+      "ok": true,
+      "ms": 989,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "missing": "Missing issuer for leaf.certkit.test: expected issuer CN=inter.certkit.test"
+      }
+    },
+    {
+      "name": "der-jwk-inspector: DER certificate file → summary",
+      "ok": true,
+      "ms": 127,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "summaryLines": 18
+      }
+    },
+    {
+      "name": "der-jwk-inspector: JWK set → 2 keys with kid/alg/use",
+      "ok": true,
+      "ms": 1501,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "rows": 2
+      }
+    },
+    {
+      "name": "der-jwk-inspector: invalid JWK JSON → error",
+      "ok": true,
+      "ms": 460,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "details": {
+        "error": "Input is neither a JWK (object with \"kty\") nor a JWK set (object with a \"keys\" a"
+      }
+    }
+  ]
+}

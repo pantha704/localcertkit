@@ -1,13 +1,22 @@
 {
   "name": "certkit",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "Gate-0 spike: fully in-browser PKCS#12 (.pfx/.p12) parsing, certificate inspection and PEM export. No server, no upload.",
+  "description": "Browser-local certificate & key toolkit: PFX <-> PEM, certificate/CSR decoding, key match, chain order, DER/JWK inspection. No uploads.",
   "scripts": {
     "fixtures": "bash scripts/make-fixtures.sh",
+    "sync": "node scripts/sync-site-lib.mjs",
+    "site:dev": "cd site && bun run dev",
+    "site:build": "cd site && bun run build",
+    "site:preview": "cd site && bun run preview",
+    "site:check": "cd site && bun run check",
     "test:node": "node tests/node-smoke.mjs",
     "test:browser": "node tests/browser-test.mjs",
-    "test": "node tests/node-smoke.mjs && node tests/browser-test.mjs"
+    "test:lib": "node tests/lib-gate1.mjs",
+    "test:mvp": "node tests/mvp-evidence.mjs",
+    "test:axe": "node tests/axe-scan.mjs",
+    "test": "node tests/node-smoke.mjs && node tests/browser-test.mjs && node tests/lib-gate1.mjs",
+    "deploy": "cd site && bun run build && cd .. && wrangler pages deploy site/dist --project-name localcertkit"
   },
   "dependencies": {
     "node-forge": "^1.4.0"

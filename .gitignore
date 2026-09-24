@@ -2,5 +2,13 @@ node_modules/
 package-lock.json
 bun.lock
 bun.lockb
+!site/bun.lock
 tests/out/*.p12
 tests/out/*.pem
+
+# Generated site artifacts (sync script + astro)
+site/node_modules/
+site/dist/
+site/.astro/
+site/public/vendor/
+site/public/lib/

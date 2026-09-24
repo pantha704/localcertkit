@@ -1,0 +1,70 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  title="Key & Certificate Match Check — local"
+  description="Check whether a private key belongs to a certificate: RSA modulus comparison plus a real sign/verify round-trip, in your browser. Clear MATCH / NO MATCH result. No upload."
+  h1="Key ↔ certificate match"
+  lead="Paste a private key and a certificate (or drop files). CertKit compares the RSA modulus and runs a real SHA-256 sign/verify round-trip between the two — not just a fingerprint guess."
+  path="/key-cert-match/"
+  toolScript="/js/tools/key-cert-match.js"
+  jsonLdName="Key and certificate match checker"
+  jsonLdDescription="Verify that an RSA private key matches a certificate using modulus comparison and a sign/verify round-trip, entirely in the browser."
+  faq={[
+    {
+      q: 'How is the match determined?',
+      a: 'Two independent checks: the RSA modulus and public exponent of the key and certificate must be identical, and the certificate’s public key must successfully verify a signature produced by the private key in this tab. Both must pass for a MATCH.',
+    },
+    {
+      q: 'What does NO MATCH look like?',
+      a: 'A red NO MATCH badge, plus the detail that failed: modulus differs, or the sign/verify check failed. A NO MATCH means this key and certificate will not work together — find the right pair before deploying.',
+    },
+    {
+      q: 'Can a NO MATCH be a false alarm?',
+      a: 'No for RSA: identical keys always pass both checks. Certificate and key from different pairs (for example a renewed certificate with the old key) will always report NO MATCH.',
+    },
+    {
+      q: 'Does my key leave the browser?',
+      a: 'No. The key is read in this tab and used only for the local sign/verify calculation. Open DevTools → Network while running the check to confirm there are no requests.',
+    },
+  ]}
+>
+  <div id="tool-error" class="alert alert-error" role="alert" hidden></div>
+  <div id="tool-status" class="visually-hidden" role="status"></div>
+
+  <form id="tool-form" class="card" novalidate>
+    <h2>Private key</h2>
+    <div class="file-drop" data-dropzone>
+      <label class="field-label" for="key-file">Key file <span class="hint">.pem / .key — or paste below</span></label>
+      <input type="file" id="key-file" accept=".pem,.key,.txt" />
+    </div>
+    <div class="field">
+      <label class="visually-hidden" for="key-input">Private key PEM</label>
+      <textarea id="key-input" class="mono" spellcheck="false" rows="6" placeholder="-----BEGIN PRIVATE KEY-----"></textarea>
+    </div>
+
+    <h2>Certificate</h2>
+    <div class="file-drop" data-dropzone>
+      <label class="field-label" for="cert-file">Certificate file <span class="hint">.pem / .crt / .cer / .der — or paste below</span></label>
+      <input type="file" id="cert-file" accept=".pem,.crt,.cer,.der,.txt" />
+    </div>
+    <div class="field">
+      <label class="visually-hidden" for="cert-input">Certificate PEM or DER</label>
+      <textarea id="cert-input" class="mono" spellcheck="false" rows="6" placeholder="-----BEGIN CERTIFICATE-----"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button type="submit" class="btn" id="match-run">Check match</button>
+    </div>
+  </form>
+
+  <section id="results" class="card" aria-labelledby="results-heading" hidden>
+    <div class="result-head">
+      <h2 id="results-heading">Match result</h2>
+      <span id="match-badge" class="badge badge-neutral">—</span>
+    </div>
+    <dl class="summary-dl" id="match-summary"></dl>
+    <p id="match-advice" class="small muted"></p>
+  </section>
+</ToolPage>

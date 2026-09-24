@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import { TOOLS } from '../lib/site';
+---
+
+<Base title="Page not found (404)" description="That page does not exist. Head back to the CertKit tools." noindex>
+  <div class="wrap">
+    <div class="not-found">
+      <h1>404 — page not found</h1>
+      <p class="lead">That URL does not exist. The tools all live here:</p>
+      <ul class="tool-grid">
+        {TOOLS.map((tool) => (
+          <li>
+            <a class="tool-card" href={tool.href}>
+              <h3>{tool.label}</h3>
+              <p>{tool.blurb}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p><a href="/">Back to the home page</a></p>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+
+const planned = [
+  {
+    title: 'EC & Ed25519 support (v1.1)',
+    body: 'The single most requested direction. RSA is fully covered today; EC/Ed25519 X.509 and PKCS#12 objects currently produce a clear unsupported error. The plan is an in-browser fallback that handles the same local-only guarantee.',
+  },
+  {
+    title: 'Batch mode',
+    body: 'Convert or decode many files in one session with per-file results — still without uploading anything.',
+  },
+  {
+    title: 'Offline / desktop packaging',
+    body: 'The whole site already works offline once loaded; a packaged build (PWA and a downloadable single-file version) would make that explicit and let you keep a copy next to your sensitive files.',
+  },
+  {
+    title: 'CLI or scripted use',
+    body: 'A command-line version of the same parsing core for automation — after the browser tools are complete.',
+  },
+  {
+    title: 'More PKCS#12 write options',
+    body: 'Optional AES-256 MAC and encrypted certificate bags for the PEM → PFX path, moving beyond the current SHA-1 MAC + unencrypted cert bags limitation.',
+  },
+];
+
+const shipped = [
+  'PFX/P12 → PEM with key-match verification',
+  'PEM → PFX with mismatch protection and honest compatibility notes',
+  'Certificate decoder (PEM + DER) with raw JSON view',
+  'CSR decoder with signature verification and requested SANs',
+  'Key ↔ certificate match (modulus + sign/verify)',
+  'Chain order with missing-issuer detection',
+  'DER & JWK inspector with private-material warnings',
+];
+---
+
+<Base
+  title="Roadmap — EC support first"
+  description="CertKit roadmap: EC/Ed25519 support, batch mode, offline packaging, CLI and improved PKCS#12 write options. See what shipped in v1 and what comes next."
+>
+  <div class="wrap tool-wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li aria-current="page">Roadmap</li>
+      </ol>
+    </nav>
+
+    <header class="tool-head">
+      <h1>Roadmap</h1>
+      <p class="lead">What is shipped, what is next, and what is explicitly not promised yet.</p>
+    </header>
+
+    <section class="card">
+      <h2>Shipped — v1.0</h2>
+      <ul>
+        {shipped.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      <p class="small muted">All of it RSA-first, browser-local, and covered by an automated test harness.</p>
+    </section>
+
+    <section class="card">
+      <h2>Planned — in rough order</h2>
+      {planned.map((item) => (
+        <div>
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+        </div>
+      ))}
+      <p class="small muted">
+        No dates, no promises: items move when they are proven and tested. That is also why EC support
+        reports an honest error today instead of silently doing the wrong thing.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Not planned</h2>
+      <ul>
+        <li>Uploading or server-side processing of keys — that would defeat the point.</li>
+        <li>Accounts, subscriptions, ads or tracking.</li>
+        <li>Claiming to be a certificate authority, a validator of trust chains, or a security audit.</li>
+      </ul>
+    </section>
+  </div>
+</Base>

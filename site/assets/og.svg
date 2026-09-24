@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0b1220"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#4338ca"/>
+  <g transform="translate(88,96) scale(1.6)">
+    <path d="M32 9 49 15.5v12.2C49 40.4 41.2 49.4 32 53 22.8 49.4 15 40.4 15 27.7V15.5Z" fill="none" stroke="#a5b4fc" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="32" cy="27" r="5" fill="#a5b4fc"/>
+    <path d="M32 32v10" stroke="#a5b4fc" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="88" y="300" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="84" font-weight="800" fill="#f1f5f9">CertKit</text>
+  <text x="88" y="368" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="36" fill="#a5b4fc">Certificate tools that never see your keys</text>
+  <text x="88" y="452" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" fill="#cbd5e1">PFX ↔ PEM · certificate &amp; CSR decoders · key match · chain order</text>
+  <text x="88" y="552" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" fill="#64748b">localcertkit.pages.dev — everything runs in your browser, nothing is uploaded</text>
+</svg>

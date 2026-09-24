@@ -1,0 +1,47 @@
+---
+import { REPO_URL, SITE, TOOLS } from '../lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h2>Tools</h2>
+        <ul>
+          {TOOLS.map((tool) => (
+            <li><a href={tool.href}>{tool.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Site</h2>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/roadmap/">Roadmap</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Principles</h2>
+        <ul>
+          <li>No uploads — files stay in your browser</li>
+          <li>No accounts, no tracking, no ads</li>
+          <li>RSA-first; EC support on the roadmap</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-note">
+      <p>© {year} {SITE.name}. Free browser-local certificate tools.</p>
+      {
+        REPO_URL ? (
+          <p><a href={REPO_URL}>Source code</a></p>
+        ) : (
+          <p class="placeholder">Open-source repository — link coming soon</p>
+        )
+      }
+    </div>
+  </div>
+</footer>

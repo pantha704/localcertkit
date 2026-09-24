@@ -1,0 +1,106 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  title="PFX to PEM Converter — local, nothing uploaded"
+  description="Convert PFX / P12 to PEM in your browser: extract the private key and certificate chain from a .pfx or .p12 file. Free, no upload, no accounts — modern AES-256 and legacy PKCS#12 files supported."
+  h1="PFX to PEM"
+  lead="Extract the private key and certificate chain from a .pfx / .p12 file. The file is read in this browser tab — it is never sent anywhere."
+  path="/pfx-to-pem/"
+  toolScript="/js/tools/pfx-to-pem.js"
+  jsonLdName="PFX to PEM converter"
+  jsonLdDescription="Extract a private key and certificate chain from a PKCS#12 (.pfx/.p12) file entirely in the browser. Files are never uploaded."
+  faq={[
+    {
+      q: 'Are my files or password sent anywhere?',
+      a: 'No. The PFX file is read with the browser File API and decrypted by JavaScript running in this tab. There is no server call in this flow: open DevTools → Network and run a conversion to confirm.',
+    },
+    {
+      q: 'Which PKCS#12 formats are supported?',
+      a: 'Modern files (PBES2: AES-256-CBC + PBKDF2 + SHA-256 MAC) and legacy files (3DES, RC2-40, SHA-1 MAC, files without a MAC) are all supported. Passwordless files work with an empty password.',
+    },
+    {
+      q: 'It says my file is unsupported — why?',
+      a: 'CertKit v1 is RSA-only. Files containing EC or Ed25519 keys or certificates fail with a clear message; EC support is planned on the roadmap. Encrypted files with a wrong password fail the integrity check and report a wrong-password error.',
+    },
+    {
+      q: 'What exactly comes out of a conversion?',
+      a: 'The RSA private key as a PKCS#1 PEM block, every certificate in the file as PEM blocks (original order kept), and a combined bundle with the key first — ready for nginx, Apache or an environment variable.',
+    },
+  ]}
+>
+  <div id="tool-error" class="alert alert-error" role="alert" hidden></div>
+  <div id="tool-status" class="visually-hidden" role="status"></div>
+
+  <form id="tool-form" class="card" novalidate>
+    <h2>Your .pfx / .p12 file</h2>
+    <div class="file-drop" data-dropzone>
+      <label class="field-label" for="pfx-file">
+        PKCS#12 file
+        <span class="hint">.pfx or .p12 — drag &amp; drop it here, or choose a file</span>
+      </label>
+      <input
+        type="file"
+        id="pfx-file"
+        accept=".pfx,.p12,application/x-pkcs12,application/octet-stream"
+      />
+    </div>
+    <div class="field">
+      <label for="pfx-password">
+        Password
+        <span class="hint">Passwords are case-sensitive. Leave empty only if the file has no password.</span>
+      </label>
+      <input type="password" id="pfx-password" autocomplete="off" spellcheck="false" />
+    </div>
+    <div class="btn-row">
+      <button type="submit" class="btn" id="pfx-run">Convert to PEM</button>
+    </div>
+    <p class="small muted">
+      RSA-first v1: files with EC / Ed25519 keys are not supported yet —
+      <a href="/roadmap/">see the roadmap</a>.
+    </p>
+  </form>
+
+  <section id="results" class="card" aria-labelledby="results-heading" hidden>
+    <div class="result-head">
+      <h2 id="results-heading">Results</h2>
+      <span id="match-badge" class="badge badge-neutral">no key match result</span>
+    </div>
+    <dl class="summary-dl" id="file-summary"></dl>
+
+    <div class="out">
+      <h3>Private key (PEM)</h3>
+      <label class="visually-hidden" for="out-key">Private key in PEM format</label>
+      <textarea id="out-key" class="mono" readonly spellcheck="false"></textarea>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-key" data-copy-status="copy-status-key">Copy</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-key" data-filename="private-key.pem" data-mime="application/x-pem-file">Download .pem</button>
+        <span class="small muted" id="copy-status-key"></span>
+      </div>
+    </div>
+
+    <div class="out">
+      <h3>Certificate chain (PEM)</h3>
+      <label class="visually-hidden" for="out-certs">Certificates in PEM format</label>
+      <textarea id="out-certs" class="mono" readonly spellcheck="false"></textarea>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-certs" data-copy-status="copy-status-certs">Copy</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-certs" data-filename="certificates.pem" data-mime="application/x-pem-file">Download .pem</button>
+        <span class="small muted" id="copy-status-certs"></span>
+      </div>
+    </div>
+
+    <div class="out">
+      <h3>Bundle — key + certificates</h3>
+      <p class="small muted">Handy for servers that want the key and chain in one file.</p>
+      <label class="visually-hidden" for="out-bundle">Private key and certificate bundle</label>
+      <textarea id="out-bundle" class="mono" readonly spellcheck="false"></textarea>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-bundle" data-copy-status="copy-status-bundle">Copy</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-bundle" data-filename="bundle.pem" data-mime="application/x-pem-file">Download .pem</button>
+        <span class="small muted" id="copy-status-bundle"></span>
+      </div>
+    </div>
+  </section>
+</ToolPage>
