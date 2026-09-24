@@ -140,6 +140,15 @@
       notesBlock.hidden = true;
     }
 
+    UI.setOutput(
+      'out-chain',
+      r.ordered
+        .map(function (o) {
+          return o.pem;
+        })
+        .join('\n')
+    );
+
     UI.show('results');
     UI.announce(
       'Chain ordered: ' +

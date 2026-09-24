@@ -126,6 +126,7 @@ check('chain order: shuffled root/leaf/inter → leaf,inter,root', () => {
   assert(r.unlinked.length === 0, 'nothing should be unlinked');
   assert(r.links.length === 2 && r.links.every((l) => l.signatureValid === true), 'links must verify');
   assert(r.allValid === true, 'allValid');
+  assert(/-----BEGIN CERTIFICATE-----/.test(r.ordered[0].pem), 'ordered entries must carry PEM');
   return { order: order.join(' → '), links: r.links.length, sigValid: true };
 });
 

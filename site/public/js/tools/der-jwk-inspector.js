@@ -16,6 +16,7 @@
   var jwkInput = document.getElementById('jwk-input');
 
   UI.wireDropzones();
+  UI.wireOutputActions();
 
   function fail(err) {
     document.getElementById('der-results').hidden = true;
@@ -51,6 +52,7 @@
           ['SHA-256 fingerprint', info.sha256Fingerprint],
         ]);
         document.getElementById('der-results').hidden = false;
+        UI.setOutput('out-der-pem', r.pem);
         UI.announce('DER certificate inspected. Subject: ' + UI.formatDN(info.subject) + '.');
       } catch (err) {
         fail(err);
@@ -127,6 +129,29 @@
     });
     document.getElementById('jwk-caption').textContent =
       r.kind + ' — ' + r.keyCount + ' key' + (r.keyCount === 1 ? '' : 's');
+
+    var report = {
+      tool: 'CertKit JWK inspector',
+      kind: r.kind,
+      keyCount: r.keyCount,
+      verification: 'none performed (parse-only inspector)',
+      keys: r.keys.map(function (k) {
+        return {
+          kty: k.kty,
+          kid: k.kid,
+          alg: k.alg,
+          use: k.use,
+          key_ops: k.key_ops,
+          crv: k.crv,
+          bits: k.bits,
+          hasPrivateMaterial: k.hasPrivateMaterial,
+          x5cCount: k.x5cCount,
+          x5cSubject: k.x5cSubject,
+        };
+      }),
+      warnings: r.warnings,
+    };
+    UI.setOutput('out-jwk-json', JSON.stringify(report, null, 2));
 
     document.getElementById('jwk-results').hidden = false;
     UI.announce(r.kind + ' parsed: ' + r.keyCount + ' key(s). No verification performed.');

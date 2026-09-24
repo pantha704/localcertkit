@@ -66,5 +66,17 @@ import ToolPage from '../layouts/ToolPage.astro';
     </div>
     <dl class="summary-dl" id="match-summary"></dl>
     <p id="match-advice" class="small muted"></p>
+
+    <div class="out">
+      <h3>Result report</h3>
+      <p class="small muted">A text summary you can keep with the deployment notes.</p>
+      <label class="visually-hidden" for="out-report">Match report text</label>
+      <textarea id="out-report" class="mono" readonly spellcheck="false" hidden></textarea>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-report" data-copy-status="copy-status-report">Copy result</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-report" data-filename="key-cert-match.txt" data-mime="text/plain;charset=utf-8">Download .txt</button>
+        <span class="small muted" id="copy-status-report"></span>
+      </div>
+    </div>
   </section>
 </ToolPage>

@@ -267,6 +267,8 @@ await testCase('key-cert-match: real pair → MATCH', async () => {
   const summary = await page.locator('#match-summary').innerText();
   assert(/Identical modulus/i.test(summary), 'modulus detail missing');
   assert(/Passed/i.test(summary), 'sign/verify detail missing');
+  const report = await page.inputValue('#out-report');
+  assert(/Result: MATCH/.test(report), 'report output missing MATCH');
   return { badge: badge.slice(0, 40) };
 });
 
@@ -314,7 +316,17 @@ await testCase('chain-order: shuffled root/leaf/inter → ordered leaf→root', 
   const links = await page.locator('#links-list').innerText();
   assert((links.match(/signature verified/g) || []).length === 2, 'expected 2 verified links: ' + links);
   assert(await page.locator('#missing-block').isHidden(), 'no missing issuer expected');
-  return { order: 'leaf → inter → root', links: 2 };
+  const bundle = await page.inputValue('#out-chain');
+  assert((bundle.match(/BEGIN CERTIFICATE/g) || []).length === 3, 'ordered bundle should hold 3 certs');
+  const bundleCns = bundle
+    .split(/(?=-----BEGIN CERTIFICATE-----)/)
+    .filter((s) => s.includes('BEGIN CERTIFICATE'))
+    .map((s) => forge.pki.certificateFromPem(s).subject.getField('CN').value);
+  assert(
+    JSON.stringify(bundleCns) === JSON.stringify(['leaf.certkit.test', 'inter.certkit.test', 'root.certkit.test']),
+    'bundle order wrong: ' + bundleCns.join(',')
+  );
+  return { order: 'leaf → inter → root', links: 2, bundleBytes: bundle.length };
 });
 
 await testCase('chain-order: missing intermediate → reported + unlinked root', async () => {
@@ -339,6 +351,8 @@ await testCase('der-jwk-inspector: DER certificate file → summary', async () =
   const summary = await page.locator('#der-summary').innerText();
   assert(summary.includes('leaf.certkit.test'), 'CN missing');
   assert(summary.includes('203.0.113.10'), 'IP SAN missing');
+  const pem = await page.inputValue('#out-der-pem');
+  assert(/BEGIN CERTIFICATE/.test(pem), 'PEM output missing');
   return { summaryLines: summary.split('\n').length };
 });
 
@@ -359,7 +373,9 @@ await testCase('der-jwk-inspector: JWK set → 2 keys with kid/alg/use', async (
   assert(table.includes('EC'), 'EC member missing');
   const note = await page.locator('#jwk-results').innerText();
   assert(/no signature verification/i.test(note), 'no-verification note missing');
-  return { rows };
+  const report = JSON.parse(await page.inputValue('#out-jwk-json'));
+  assert(report.kind === 'JWK Set' && report.keyCount === 2, 'JSON report wrong');
+  return { rows, reportKeys: report.keys.length };
 });
 
 await testCase('der-jwk-inspector: invalid JWK JSON → error', async () => {

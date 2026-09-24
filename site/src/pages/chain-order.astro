@@ -83,6 +83,18 @@ import ToolPage from '../layouts/ToolPage.astro';
       <ul id="notes-list"></ul>
     </div>
 
+    <div class="out">
+      <h3>Ordered bundle (PEM)</h3>
+      <p class="small muted">The same certificates in leaf → root order — paste-ready for a server config.</p>
+      <label class="visually-hidden" for="out-chain">Ordered certificate bundle</label>
+      <textarea id="out-chain" class="mono" readonly spellcheck="false" hidden></textarea>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-chain" data-copy-status="copy-status-chain">Copy bundle</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-chain" data-filename="chain-ordered.pem" data-mime="application/x-pem-file">Download .pem</button>
+        <span class="small muted" id="copy-status-chain"></span>
+      </div>
+    </div>
+
     <p class="small muted">
       The order is a consistency check, not a trust validation. For production trust decisions use a
       full certificate validator.

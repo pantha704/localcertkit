@@ -70,6 +70,18 @@
       ? 'Good pair: this key and certificate belong together and will work as a pair (for example in a TLS server config).'
       : 'These do not belong together. A common cause: a renewed certificate saved next to the previous key. Find the key that was used when this certificate was created (or the certificate that matches this key).';
 
+    var reportLines = [
+      'CertKit key \u2194 certificate match report',
+      'Result: ' + (r.match ? 'MATCH' : 'NO MATCH'),
+      'Private key: RSA ' + r.keyBits + '-bit' + (keyName ? ' (' + keyName + ')' : ''),
+      'Certificate: ' + (cn ? 'CN=' + cn : UI.formatDN(r.certInfo.subject)) + (certName ? ' (' + certName + ')' : ''),
+      'Modulus comparison: ' + (r.modulusEqual === true ? 'identical' : 'differs'),
+      'Sign/verify round-trip: ' + (r.signVerifyPassed ? 'passed' : 'failed (' + (r.signVerifyError || 'signature not verified') + ')'),
+      'Certificate validity: ' + (r.certInfo.expired ? 'expired' : 'within validity window'),
+      'Checked locally in the browser \u2014 no upload.',
+    ];
+    UI.setOutput('out-report', reportLines.join('\n'));
+
     UI.show('results');
     UI.announce(r.match ? 'Result: match.' : 'Result: no match.');
   }

@@ -53,6 +53,13 @@ import ToolPage from '../layouts/ToolPage.astro';
 
     <div id="der-results" hidden>
       <dl class="summary-dl" id="der-summary"></dl>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-der-pem" data-copy-status="copy-status-der">Copy PEM</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-der-pem" data-filename="certificate.pem" data-mime="application/x-pem-file">Download PEM</button>
+        <span class="small muted" id="copy-status-der"></span>
+      </div>
+      <label class="visually-hidden" for="out-der-pem">Certificate PEM</label>
+      <textarea id="out-der-pem" class="mono" readonly spellcheck="false" hidden></textarea>
       <p class="small muted">
         Need the full view? <a href="/certificate-decoder/">Open it in the certificate decoder</a>
         (with the raw ASN.1 JSON and extension list).
@@ -96,6 +103,13 @@ import ToolPage from '../layouts/ToolPage.astro';
         </thead>
         <tbody></tbody>
       </table>
+      <div class="out-actions">
+        <button type="button" class="btn btn-small btn-secondary" data-copy="out-jwk-json" data-copy-status="copy-status-jwk">Copy report (JSON)</button>
+        <button type="button" class="btn btn-small btn-secondary" data-download="out-jwk-json" data-filename="jwk-report.json" data-mime="application/json;charset=utf-8">Download .json</button>
+        <span class="small muted" id="copy-status-jwk"></span>
+      </div>
+      <label class="visually-hidden" for="out-jwk-json">JWK inspection report as JSON</label>
+      <textarea id="out-jwk-json" class="mono" readonly spellcheck="false" hidden></textarea>
       <p class="small muted">
         Parsed for inspection only — <strong>no signature verification or key validation is performed</strong>.
         To check a key against a certificate, use the <a href="/key-cert-match/">match checker</a> (RSA).
