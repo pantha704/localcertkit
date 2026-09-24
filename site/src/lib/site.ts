@@ -8,7 +8,7 @@ export const SITE = {
  * Open-source repository link. Placeholder until the repo is published:
  * when set, the trust section and footer become real links.
  */
-export const REPO_URL = '';
+export const REPO_URL = 'https://github.com/pantha704/localcertkit';
 
 /**
  * Reserved slot for a future certificate-provider affiliate partner.
